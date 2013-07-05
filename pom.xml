@@ -1,11 +1,10 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <prerequisites>
         <maven>3.0.5</maven>
     </prerequisites>
     <groupId>com.tagtraum</groupId>
-    <version>0.9.1-SNAPSHOT</version>
+    <version>0.9.1</version>
     <artifactId>mfsampledsp</artifactId>
     <packaging>jar</packaging>
     <name>mfsampledsp</name>
@@ -205,38 +204,38 @@
                         <phase>process-classes</phase>
                         <configuration>
                             <target>
-                                <property environment="env"/>
+                                <property environment="env" />
 
                                 <echo>===================================</echo>
                                 <echo>Generating JNI headers via javah...</echo>
                                 <echo>===================================</echo>
-                                <mkdir dir="${project.build.directory}\native\javah"/>
+                                <mkdir dir="${project.build.directory}\native\javah" />
                                 <exec executable="${env.JAVA_HOME}\bin\javah.exe">
-                                    <arg line="-classpath '${project.build.directory}\classes' -force -d '${project.build.directory}\native\javah' com.tagtraum.mfsampledsp.MFAudioFileReader com.tagtraum.mfsampledsp.MFFileInputStream"/>
+                                    <arg line="-classpath '${project.build.directory}\classes' -force -d '${project.build.directory}\native\javah' com.tagtraum.mfsampledsp.MFAudioFileReader com.tagtraum.mfsampledsp.MFFileInputStream" />
                                 </exec>
 
                                 <echo>===================================</echo>
                                 <echo>Building i386 dll...</echo>
                                 <echo>===================================</echo>
                                 <ant antfile="${project.basedir}/cl_link.xml" inheritRefs="true">
-                                    <property name="project.build.directory" value="${project.build.directory}"/>
-                                    <property name="basedir" value="${basedir}"/>
-                                    <property name="winsdk" value="${win32.sdk}"/>
-                                    <property name="arch" value="i386"/>
-                                    <property name="machine" value="x86"/>
-                                    <property name="jniheaders" value="${win32.headers.jni}"/>
+                                    <property name="project.build.directory" value="${project.build.directory}" />
+                                    <property name="basedir" value="${basedir}" />
+                                    <property name="winsdk" value="${win32.sdk}" />
+                                    <property name="arch" value="i386" />
+                                    <property name="machine" value="x86" />
+                                    <property name="jniheaders" value="${win32.headers.jni}" />
                                 </ant>
 
                                 <echo>===================================</echo>
                                 <echo>Building x86_64 dll...</echo>
                                 <echo>===================================</echo>
                                 <ant antfile="${project.basedir}/cl_link.xml" inheritRefs="true">
-                                    <property name="project.build.directory" value="${project.build.directory}"/>
-                                    <property name="basedir" value="${basedir}"/>
-                                    <property name="winsdk" value="${win32.sdk}"/>
-                                    <property name="arch" value="x86_64"/>
-                                    <property name="machine" value="x64"/>
-                                    <property name="jniheaders" value="${win32.headers.jni}"/>
+                                    <property name="project.build.directory" value="${project.build.directory}" />
+                                    <property name="basedir" value="${basedir}" />
+                                    <property name="winsdk" value="${win32.sdk}" />
+                                    <property name="arch" value="x86_64" />
+                                    <property name="machine" value="x64" />
+                                    <property name="jniheaders" value="${win32.headers.jni}" />
                                 </ant>
                             </target>
                         </configuration>
@@ -306,7 +305,8 @@
         <connection>scm:git:git://github.com/hendriks73/mfsampledsp.git</connection>
         <developerConnection>scm:git:ssh://git@github.com/hendriks73/mfsampledsp.git</developerConnection>
         <url>https://github.com/hendriks73/mfsampledsp/tree/master</url>
-    </scm>
+      <tag>mfsampledsp-0.9.1</tag>
+  </scm>
 
     <issueManagement>
         <system>GitHub Issues</system>
