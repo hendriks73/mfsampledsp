@@ -1,0 +1,12 @@
+0.9.1
+
+- Fixed MF/COM initialization issue.
+- Switched to LGPL 2.1.
+- Moved to Maven 3.0.5.
+- Changed architecture classifiers from 32 to i386 and 64 to x86_64.
+- Added support for seek.
+- Switched from Visual Studio 10 to Win 7.1 SDK
+
+0.9.0
+
+- First release
