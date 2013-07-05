@@ -27,8 +27,8 @@ Introduction
 
     The easiest way to use <MFSampledSP> (other than simply using the
     {{{http://www.beatunes.com/repo/maven2/com/tagtraum/mfsampledsp/${projectversion}/mfsampledsp-${projectversion}.jar}jar}} and
-    {{{http://www.beatunes.com/repo/maven2/com/tagtraum/mfsampledsp/${projectversion}/mfsampledsp-x86_64-${projectversion}.dll}64bit-dll}}/
-    {{{http://www.beatunes.com/repo/maven2/com/tagtraum/mfsampledsp/${projectversion}/mfsampledsp-i386-${projectversion}.dll}32bit-dll}})
+    {{{http://www.beatunes.com/repo/maven2/com/tagtraum/mfsampledsp/${projectversion}/mfsampledsp-${projectversion}-x86_64.dll}64bit-dll}}/
+    {{{http://www.beatunes.com/repo/maven2/com/tagtraum/mfsampledsp/${projectversion}/mfsampledsp-${projectversion}-i386.dll}32bit-dll}})
     is to start a
     {{{http://maven.apache.org/}Maven}} project and introduce a <MFSampledSP> dependency.
 
