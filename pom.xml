@@ -292,7 +292,7 @@
             <uniqueVersion>false</uniqueVersion>
             <id>beatunes-repository</id>
             <name>beaTunes Repository</name>
-            <url>sftp://www.beatunes.com/var/www/vhosts/beatunes.com/httpdocs/repo/maven2</url>
+            <url>sftp://www.beatunes.com/var/www/html/repo/maven2</url>
         </repository>
         <downloadUrl>http://www.beatunes.com/repo/maven2</downloadUrl>
         <site>
