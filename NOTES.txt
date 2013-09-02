@@ -1,3 +1,7 @@
+0.9.2
+
+- Moved to MF_PROPERTY_HANDLER_SERVICE as primary method of obtaining meta data.
+
 0.9.1
 
 - Fixed MF/COM initialization issue.
@@ -5,7 +9,7 @@
 - Moved to Maven 3.0.5.
 - Changed architecture classifiers from 32 to i386 and 64 to x86_64.
 - Added support for seek.
-- Switched from Visual Studio 10 to Win 7.1 SDK
+- Switched from Visual Studio 10 to Win 7.1 SDK.
 
 0.9.0
 

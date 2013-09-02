@@ -68,9 +68,9 @@ public class MFAudioFileFormat extends AudioFileFormat {
             throws UnsupportedAudioFileException {
 
         super(getAudioFileFormatType(url), getLength(url),
-                new MFAudioFormat(sampleRate, sampleSize, channels, packetSize,
+                new MFAudioFormat(sampleRate == 0 ? -1 : sampleRate, sampleSize, channels, packetSize,
                         determineFrameRate(sampleRate, frameRate), bigEndian, bitRate, vbr),
-                sampleRate * durationInMs < 0 ? AudioSystem.NOT_SPECIFIED : (int)((sampleRate * durationInMs) / 1000.0)
+                sampleRate * durationInMs <= 0 ? AudioSystem.NOT_SPECIFIED : (int)((sampleRate * durationInMs) / 1000.0)
         );
         this.properties = new HashMap<java.lang.String,java.lang.Object>();
         if (durationInMs > 0) this.properties.put("duration", durationInMs * 1000L);
@@ -89,7 +89,7 @@ public class MFAudioFileFormat extends AudioFileFormat {
     }
 
     private static float determineFrameRate(final float sampleRate, final float frameRate) {
-        if (frameRate != AudioSystem.NOT_SPECIFIED) return frameRate;
+        if (frameRate != AudioSystem.NOT_SPECIFIED && frameRate != 0) return frameRate;
         return AudioSystem.NOT_SPECIFIED;
     }
 

@@ -29,10 +29,10 @@ import static org.junit.Assert.*;
 public class TestMFAudioFileReader {
 
     @Test
-    public void testGetAudioFileFormatFile() throws IOException, UnsupportedAudioFileException {
+    public void testGetAudioFileFormatMP3File() throws IOException, UnsupportedAudioFileException {
         // first copy the file from resources to actual location in temp
         final String filename = "test.mp3";
-        final File file = File.createTempFile("testGetAudioFileFormatFile", filename);
+        final File file = File.createTempFile("testGetAudioFileFormatFileMP3", filename);
         extractFile(filename, file);
         try {
             final AudioFileFormat fileFormat = new MFAudioFileReader().getAudioFileFormat(file);
@@ -45,9 +45,45 @@ public class TestMFAudioFileReader {
             final AudioFormat format = fileFormat.getFormat();
             assertEquals(2, format.getChannels());
 
+            final Integer bitrate = (Integer)format.getProperty("bitrate");
+            assertNotNull(bitrate);
+            assertEquals(192000, (int) bitrate);
+
             final Long duration = (Long)fileFormat.getProperty("duration");
             assertNotNull(duration);
             assertEquals(3056000, (long) duration);
+            assertEquals(4, format.getFrameSize());
+            assertEquals(44100f, format.getFrameRate(), 0.01f);
+            assertEquals(AudioFormat.Encoding.PCM_SIGNED, format.getEncoding());
+        } finally {
+            file.delete();
+        }
+    }
+
+    @Test
+    public void testGetAudioFileFormatM4AFile() throws IOException, UnsupportedAudioFileException {
+        // first copy the file from resources to actual location in temp
+        final String filename = "test.m4a";
+        final File file = File.createTempFile("testGetAudioFileFormatFileM4A", filename);
+        extractFile(filename, file);
+        try {
+            final AudioFileFormat fileFormat = new MFAudioFileReader().getAudioFileFormat(file);
+            System.out.println(fileFormat);
+
+            assertEquals("m4a", fileFormat.getType().getExtension());
+            assertEquals(file.length(), fileFormat.getByteLength());
+            assertEquals(136180, fileFormat.getFrameLength());
+
+            final AudioFormat format = fileFormat.getFormat();
+            assertEquals(2, format.getChannels());
+
+            final Integer bitrate = (Integer)format.getProperty("bitrate");
+            assertNotNull(bitrate);
+            assertEquals(92760, (int) bitrate);
+
+            final Long duration = (Long)fileFormat.getProperty("duration");
+            assertNotNull(duration);
+            assertEquals(3088000, (long) duration);
             assertEquals(4, format.getFrameSize());
             assertEquals(44100f, format.getFrameRate(), 0.01f);
             assertEquals(AudioFormat.Encoding.PCM_SIGNED, format.getEncoding());

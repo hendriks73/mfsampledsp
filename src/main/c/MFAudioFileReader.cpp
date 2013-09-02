@@ -23,6 +23,7 @@
 
 #include "com_tagtraum_mfsampledsp_MFAudioFileReader.h"
 #include "MFUtils.h"
+#include "Propkey.h"
 
 /**
  * Creates an AudioFileFormat instance for the given URL.
@@ -46,7 +47,7 @@ JNIEXPORT jobject JNICALL Java_com_tagtraum_mfsampledsp_MFAudioFileReader_intGet
     UINT32 mfSampleRateInt = 0;
     UINT32 mfBitsPerSample = 0;
     UINT32 mfBytesPerSample = 0;
-    GUID mfSubType;
+    BOOL mfVBR = FALSE;
 
     DWORD cStreams = 0;
     DWORD dwStreamId = 0;
@@ -55,6 +56,8 @@ JNIEXPORT jobject JNICALL Java_com_tagtraum_mfsampledsp_MFAudioFileReader_intGet
     IMFMetadata *pMFMetadata = NULL;
     IMFMetadataProvider *pMetaProvider = NULL;
     IMFGetService *pMetadataService = NULL;
+
+    IPropertyStore *pProps = NULL;
 
     res = mf_createMediaSource(env, url, &pMediaSrc);
     if (res) {
@@ -72,11 +75,38 @@ JNIEXPORT jobject JNICALL Java_com_tagtraum_mfsampledsp_MFAudioFileReader_intGet
     // error handling?
     res = pPD->GetUINT32(MF_PD_AUDIO_ENCODING_BITRATE, &mfBitRate);
     // error handling?
-
     res = pMediaSrc->QueryInterface(IID_IMFGetService, (void**)&pMetadataService);
-    if (SUCCEEDED(pMetadataService->GetService(MF_METADATA_PROVIDER_SERVICE,  IID_IMFMetadataProvider, (void**)&pMetaProvider))) {
 
-		// iterate over streams
+    if (SUCCEEDED(MFGetService(pMediaSrc, MF_PROPERTY_HANDLER_SERVICE, IID_PPV_ARGS(&pProps)))) {
+#ifdef DEBUG
+        fprintf(stderr, "Let's try MF_PROPERTY_HANDLER_SERVICE\n");
+#endif
+        PROPVARIANT pv;
+        if (SUCCEEDED(pProps->GetValue(PKEY_Audio_ChannelCount, &pv))) {
+            mfChannels = pv.uintVal;
+        }
+        if (SUCCEEDED(pProps->GetValue(PKEY_Audio_SampleRate, &pv))) {
+            mfSampleRateInt = pv.uintVal;
+        }
+        if (SUCCEEDED(pProps->GetValue(PKEY_Audio_SampleSize, &pv))) {
+            mfBitsPerSample = pv.uintVal;
+            mfBytesPerSample = mfBitsPerSample/8; // this may not be accurate!!
+        }
+        if (SUCCEEDED(pProps->GetValue(PKEY_Audio_IsVariableBitRate, &pv))) {
+            mfVBR = pv.boolVal;
+        }
+        if (SUCCEEDED(pProps->GetValue(PKEY_Audio_EncodingBitrate, &pv))) {
+            mfBitRate = pv.uintVal;
+        }
+        PropVariantClear(&pv);
+    } else if (SUCCEEDED(pMetadataService->GetService(MF_METADATA_PROVIDER_SERVICE, IID_IMFMetadataProvider, (void**)&pMetaProvider))) {
+
+        // we do this, in case we couldn't get a MF_PROPERTY_HANDLER_SERVICE (wave files)
+#ifdef DEBUG
+        fprintf(stderr, "Let's try MF_METADATA_PROVIDER_SERVICE\n");
+#endif
+
+        // iterate over streams
         res = pPD->GetStreamDescriptorCount(&cStreams);
         if (res) {
             throwUnsupportedAudioFileExceptionIfError(env, res, "Failed to get stream count");
@@ -111,7 +141,7 @@ JNIEXPORT jobject JNICALL Java_com_tagtraum_mfsampledsp_MFAudioFileReader_intGet
             res = pSD->GetMediaTypeHandler(&pHandler);
             res = pHandler->GetMediaTypeCount(&cTypes);
             //fprintf(stderr, "3 GetMediaTypeCount : '%i'\n", cTypes);
-            for (DWORD iType = 0; iType < cTypes; iType++) {   
+            for (DWORD iType = 0; iType < cTypes; iType++) {
                 res = pHandler->GetMediaTypeByIndex(iType, &pMediaType);
                 if (FAILED(res)) {
                     break;
@@ -119,57 +149,36 @@ JNIEXPORT jobject JNICALL Java_com_tagtraum_mfsampledsp_MFAudioFileReader_intGet
                 GUID mfMajorType;
                 res = pMediaType->GetGUID(MF_MT_MAJOR_TYPE, &mfMajorType);
                 if (mfMajorType != MFMediaType_Audio) continue;
-                
+
                 res = pMediaType->GetUINT32(MF_MT_AUDIO_NUM_CHANNELS, &mfChannels);
                 res = pMediaType->GetDouble(MF_MT_AUDIO_FLOAT_SAMPLES_PER_SECOND, &mfSampleRate);
                 res = pMediaType->GetUINT32(MF_MT_AUDIO_SAMPLES_PER_SECOND, &mfSampleRateInt);
                 res = pMediaType->GetUINT32(MF_MT_AUDIO_BITS_PER_SAMPLE, &mfBitsPerSample);
                 res = pMediaType->GetUINT32(MF_MT_SAMPLE_SIZE, &mfBytesPerSample);
-                res = pMediaType->GetGUID(MF_MT_SUBTYPE, &mfSubType);
             }
 
-
             // =====
-
             res = pSD->GetStreamIdentifier(&dwStreamId);
             if (res) {
                 throwUnsupportedAudioFileExceptionIfError(env, res, "Failed get stream identifier");
                 goto bail;
             }
-
-            /*
-            res = pMetaProvider->GetMFMetadata(pPD, dwStreamId, 0, &pMFMetadata);
-            if (res) {
-                throwUnsupportedAudioFileExceptionIfError(env, res, "Failed to get MFMetadata");
-                goto bail;
-            }
-
-			PROPVARIANT varPropNames;
-            LPWSTR pwszPropName = NULL;
-            pMFMetadata->GetAllPropertyNames(&varPropNames);
-
-            //fprintf(stderr, "5 dwPropIndex : '%i'\n", varPropNames.calpwstr.cElems);
-            for(DWORD dwPropIndex = 0; dwPropIndex< varPropNames.calpwstr.cElems; dwPropIndex++) {
-                //fprintf(stderr, "5 dwPropIndex : '%i'\n", dwPropIndex);
-                pwszPropName = varPropNames.calpwstr.pElems[dwPropIndex];
-                fwprintf(stderr, pwszPropName);
-            }
-            */
         }
+    } else {
+        throwUnsupportedAudioFileExceptionIfError(env, 1, "Failed to read meta data");
+        goto bail;
     }
 
-
     // we always decode to LPCM, so we ignore this
-    //jint dataFormat = mfSubType.Data1;
-    jfloat sampleRate = (jfloat)(mfSampleRate == 0.0 ? (double)mfSampleRateInt : mfSampleRate);
+    jfloat sampleRate = (jfloat) (mfSampleRate == 0.0 ? (double) mfSampleRateInt : mfSampleRate);
     // if we don't know, we just say it's 16 bits per sample, because that's what we want to decode to
     jint sampleSize = mfBitsPerSample == 0 ? (mfBytesPerSample == 0 ? 16 : mfBytesPerSample * 8) : mfBitsPerSample;
     jint channels = mfChannels > 0 ? (jint)mfChannels : -1;
     jint frameSize = sampleSize == -1 || channels == -1 ? -1 : sampleSize * channels / 8;
     jboolean bigEndian = JNI_FALSE;
-    jlong duration = (jlong)(mfDuration /(float)10000);
+    jlong duration = mfDuration == 0 ? -1 : (jlong)(mfDuration /(float)10000);
     jint bitRate = (jint)mfBitRate;
-    jboolean vbr = JNI_FALSE;
+    jboolean vbr = mfVBR == FALSE ? JNI_FALSE : JNI_TRUE;
     // we always decode to LPCM, that's why the following is true
     jfloat frameRate = sampleRate;
 
@@ -177,6 +186,7 @@ JNIEXPORT jobject JNICALL Java_com_tagtraum_mfsampledsp_MFAudioFileReader_intGet
         url, sampleRate, sampleSize, channels, frameSize, frameRate, bigEndian, duration, bitRate, vbr);
 
 bail:
+    SAFE_RELEASE(pProps);
     SAFE_RELEASE(pMetaProvider);
     SAFE_RELEASE(pMetadataService);
     SAFE_RELEASE(pPD);
