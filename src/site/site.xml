@@ -11,6 +11,9 @@
         <src>./images/tagtraum-banner.png</src>
     </bannerRight>
     <body>
+        <head>
+            <meta name="keyword" content="sampledsp, java, sound, mp3, aac, javax.sound, audio, windows, media foundation" />
+        </head>
         <links>
             <item name="tagtraum" href="http://www.tagtraum.com/"/>
             <item name="beaTunes" href="http://www.beatunes.com/"/>
