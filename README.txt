@@ -4,7 +4,7 @@ README.txt
 MFSampledSP is a better-than-nothing implementation of the javax.sound.sampled
 service provider interfaces based on Microsoft's Media Foundation API.
 
-It's main purpose is to decode audio files or streams to signed linear pcm.
+Its main purpose is to decode audio files or streams to signed linear pcm.
 It's part of the SampledSP collection of libraries.
 
 This library comes with absolutely no support, warranty etc. you name it.
