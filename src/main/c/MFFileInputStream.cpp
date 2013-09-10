@@ -261,6 +261,7 @@ bail:
 
     SAFE_RELEASE(pPartialType)
     if (res) {
+        SAFE_RELEASE(aio->mediaSrcReader);
         delete aio;
         aio = NULL;
     } 
@@ -323,6 +324,7 @@ JNIEXPORT void JNICALL Java_com_tagtraum_mfsampledsp_MFFileInputStream_close(JNI
     MFAudioIO *aio = (MFAudioIO*)aioPtr;
     // TODO: check this
     if (aio != NULL) {
+        SAFE_RELEASE(aio->mediaSrcReader);
         delete aio;
         aio = NULL;
     }
