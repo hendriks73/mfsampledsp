@@ -1,3 +1,7 @@
+0.9.4
+
+- Fixed filename encoding issues with UNC paths.
+
 0.9.3
 
 - Fixed locking. Files were not closed properly.

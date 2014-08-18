@@ -6,7 +6,6 @@
  */
 package com.tagtraum.mfsampledsp;
 
-import org.junit.Assert;
 import org.junit.Test;
 
 import javax.sound.sampled.AudioFileFormat;
@@ -55,6 +54,34 @@ public class TestMFAudioFileReader {
             assertEquals(4, format.getFrameSize());
             assertEquals(44100f, format.getFrameRate(), 0.01f);
             assertEquals(AudioFormat.Encoding.PCM_SIGNED, format.getEncoding());
+        } finally {
+            file.delete();
+        }
+    }
+
+    @Test
+    public void testSpaceInFilename() throws IOException, UnsupportedAudioFileException {
+        // first copy the file from resources to actual location in temp
+        final String filename = "test.mp3";
+        final File file = File.createTempFile("test space in filename", filename);
+        extractFile(filename, file);
+        try {
+            final AudioFileFormat fileFormat = new MFAudioFileReader().getAudioFileFormat(file);
+            System.out.println(fileFormat);
+        } finally {
+            file.delete();
+        }
+    }
+
+    @Test
+    public void testPunctuationInFilename() throws IOException, UnsupportedAudioFileException {
+        // first copy the file from resources to actual location in temp
+        final String filename = "test.mp3";
+        final File file = File.createTempFile("test ;:&=+@[]? in filename", filename);
+        extractFile(filename, file);
+        try {
+            final AudioFileFormat fileFormat = new MFAudioFileReader().getAudioFileFormat(file);
+            System.out.println(fileFormat);
         } finally {
             file.delete();
         }

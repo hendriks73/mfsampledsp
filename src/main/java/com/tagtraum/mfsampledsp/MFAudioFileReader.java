@@ -133,6 +133,10 @@ public class MFAudioFileReader extends AudioFileReader {
      * @throws MalformedURLException
      */
     static URL fileToURL(final File file) throws MalformedURLException {
+        if (file.toString().startsWith("\\\\")) {
+            // we have a UNC path - do not URL encode
+            return new URL("file:" + file.toString().replace("\\", "/"));
+        }
         /*
         punct: ",;:$&+="
         reserved "?/[]@"
