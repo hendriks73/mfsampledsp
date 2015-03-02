@@ -20,8 +20,6 @@ import static org.junit.Assert.*;
 
 /**
  * TestMFAudioFileReader.
- * <p/>
- * Date: 8/19/11
  *
  * @author <a href="mailto:hs@tagtraum.com">Hendrik Schreiber</a>
  */
