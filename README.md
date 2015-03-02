@@ -42,7 +42,7 @@ installed at `C:\Program Files\Microsoft SDKs\Windows\v7.1`
 
 So all in all, something like the following might work for you:
 
-mvn -Dwin32.headers.jni=C:\jdk1.8.0_31\include\ \
+    mvn -Dwin32.headers.jni=C:\jdk1.8.0_31\include\ \
     "-Dwin32.sdk=C:\Program Files\Microsoft SDKs\Windows\v7.1" \
     clean install
 
