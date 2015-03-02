@@ -29,7 +29,7 @@ Then you still need to adjust some properties in the parent pom.xml.
 Or.. simply override them using -Dname=value notation. E.g. to point to your
 JDK's JNI headers, add
 
--Dwin32.headers.jni=C:\jdk1.7.0_25\include\
+-Dwin32.headers.jni=C:\jdk1.8.0_31\include\
 
 to your mvn call.
 
@@ -38,7 +38,7 @@ installed at C:\Program Files\Microsoft SDKs\Windows\v7.1
 
 So all in all, something like the following might work for you:
 
-mvn -Dwin32.headers.jni=C:\jdk1.7.0_25\include\ \
+mvn -Dwin32.headers.jni=C:\jdk1.8.0_31\include\ \
     "-Dwin32.sdk=C:\Program Files\Microsoft SDKs\Windows\v7.1" \
     clean install
 

@@ -42,6 +42,7 @@ public class MFFileInputStream extends MFNativePeerInputStream {
         this.seekable = isSeekable(this.pointer);
     }
 
+    @Override
     protected void fillNativeBuffer() throws IOException {
         if (isOpen()) {
             fillNativeBuffer(pointer);

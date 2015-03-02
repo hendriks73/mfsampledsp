@@ -77,7 +77,7 @@ public abstract class MFNativePeerInputStream extends InputStream {
         return nativeBuffer.get() & 0xff;
     }
 
-        @Override
+    @Override
     public int read(final byte[] b, final int off, final int len) throws IOException {
         if (len == 0) return 0;
         if (len < 0) throw new IllegalArgumentException("Length must be greater than or equal to 0: " + len);
