@@ -77,29 +77,7 @@ JNIEXPORT jobject JNICALL Java_com_tagtraum_mfsampledsp_MFAudioFileReader_intGet
     // error handling?
     res = pMediaSrc->QueryInterface(IID_IMFGetService, (void**)&pMetadataService);
 
-    if (SUCCEEDED(MFGetService(pMediaSrc, MF_PROPERTY_HANDLER_SERVICE, IID_PPV_ARGS(&pProps)))) {
-#ifdef DEBUG
-        fprintf(stderr, "Let's try MF_PROPERTY_HANDLER_SERVICE\n");
-#endif
-        PROPVARIANT pv;
-        if (SUCCEEDED(pProps->GetValue(PKEY_Audio_ChannelCount, &pv))) {
-            mfChannels = pv.uintVal;
-        }
-        if (SUCCEEDED(pProps->GetValue(PKEY_Audio_SampleRate, &pv))) {
-            mfSampleRateInt = pv.uintVal;
-        }
-        if (SUCCEEDED(pProps->GetValue(PKEY_Audio_SampleSize, &pv))) {
-            mfBitsPerSample = pv.uintVal;
-            mfBytesPerSample = mfBitsPerSample/8; // this may not be accurate!!
-        }
-        if (SUCCEEDED(pProps->GetValue(PKEY_Audio_IsVariableBitRate, &pv))) {
-            mfVBR = pv.boolVal;
-        }
-        if (SUCCEEDED(pProps->GetValue(PKEY_Audio_EncodingBitrate, &pv))) {
-            mfBitRate = pv.uintVal;
-        }
-        PropVariantClear(&pv);
-    } else if (SUCCEEDED(pMetadataService->GetService(MF_METADATA_PROVIDER_SERVICE, IID_IMFMetadataProvider, (void**)&pMetaProvider))) {
+    if (SUCCEEDED(pMetadataService->GetService(MF_METADATA_PROVIDER_SERVICE, IID_IMFMetadataProvider, (void**)&pMetaProvider))) {
 
         // we do this, in case we couldn't get a MF_PROPERTY_HANDLER_SERVICE (wave files)
 #ifdef DEBUG
@@ -164,6 +142,28 @@ JNIEXPORT jobject JNICALL Java_com_tagtraum_mfsampledsp_MFAudioFileReader_intGet
                 goto bail;
             }
         }
+    } else if (SUCCEEDED(MFGetService(pMediaSrc, MF_PROPERTY_HANDLER_SERVICE, IID_PPV_ARGS(&pProps)))) {
+#ifdef DEBUG
+        fprintf(stderr, "Let's try MF_PROPERTY_HANDLER_SERVICE\n");
+#endif
+        PROPVARIANT pv;
+        if (SUCCEEDED(pProps->GetValue(PKEY_Audio_ChannelCount, &pv))) {
+            mfChannels = pv.uintVal;
+        }
+        if (SUCCEEDED(pProps->GetValue(PKEY_Audio_SampleRate, &pv))) {
+            mfSampleRateInt = pv.uintVal;
+        }
+        if (SUCCEEDED(pProps->GetValue(PKEY_Audio_SampleSize, &pv))) {
+            mfBitsPerSample = pv.uintVal;
+            mfBytesPerSample = mfBitsPerSample/8; // this may not be accurate!!
+        }
+        if (SUCCEEDED(pProps->GetValue(PKEY_Audio_IsVariableBitRate, &pv))) {
+            mfVBR = pv.boolVal;
+        }
+        if (SUCCEEDED(pProps->GetValue(PKEY_Audio_EncodingBitrate, &pv))) {
+            mfBitRate = pv.uintVal;
+        }
+        PropVariantClear(&pv);
     } else {
         throwUnsupportedAudioFileExceptionIfError(env, 1, "Failed to read meta data");
         goto bail;
