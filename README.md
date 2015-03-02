@@ -4,6 +4,8 @@ README.md
 *MFSampledSP* is a better-than-nothing implementation of the
 [javax.sound.sampled](http://docs.oracle.com/javase/8/docs/api/javax/sound/sampled/spi/package-summary.html)
 service provider interfaces based on Microsoft's Media Foundation API.
+Among the [supported formats](https://msdn.microsoft.com/en-us/library/windows/desktop/dd757927(v=vs.85).aspx)
+are mp3, asf, wma, .aac, and m4a.
 
 Its main purpose is to decode audio files or streams to signed linear pcm.
 It is part of the [SampledSP](http://www.tagtraum.com/sampledsp.html)
