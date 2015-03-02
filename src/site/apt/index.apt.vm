@@ -8,7 +8,7 @@
 Introduction
 
     <MFSampledSP> is a free, better-than-nothing, Windows-7-or-later implementation of some of the
-    {{{http://docs.oracle.com/javase/7/docs/api/javax/sound/sampled/spi/package-summary.html}javax.sound.sampled.spi}}
+    {{{http://docs.oracle.com/javase/8/docs/api/javax/sound/sampled/spi/package-summary.html}javax.sound.sampled.spi}}
     interfaces. It is part of the {{{http://www.tagtraum.com/sampledsp.html}SampledSP}} collection of
     <<<javax.sound.sampled>>> libraries.
     Its main purpose is to decode audio from various formats at
@@ -19,7 +19,7 @@ Introduction
     No other conversions are supported. This also means that <<<AudioFormat>>> objects should be
     interpreted with a grain of salt.
 
-    Because <MFSampledSP> depends on native code, you need to add the provided dlls to your <<<java.library.path>>>
+    Because <MFSampledSP> depends on native code, you need to add the provided DLLs to your <<<java.library.path>>>
     and the provided jar to your classpath. Everything else is taken care of automatically.
 
 
@@ -66,7 +66,7 @@ Introduction
 <repository>
     <id>beatunes</id>
     <name>beaTunes Repository</name>
-    <url>http://www.beatunes.com/repo/maven2</url>
+    <url>httsp://www.beatunes.com/repo/maven2</url>
 </repository>
 +-------------------------------+
 

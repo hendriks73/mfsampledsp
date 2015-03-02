@@ -30,7 +30,7 @@ git clone git@github.com:hendriks73/mfsampledsp.git mfsampledsp
     JDK's JNI headers, add
 
 +-------------------------------+
--Dwin32.headers.jni=C:\jdk1.7.0_25\include\
+-Dwin32.headers.jni=C:\jdk1.8.0_31\include\
 +-------------------------------+
 
     to your mvn call.
@@ -41,7 +41,7 @@ git clone git@github.com:hendriks73/mfsampledsp.git mfsampledsp
     So all in all, something like the following might work for you:
 
 +-------------------------------+
-mvn -Dwin32.headers.jni=C:\jdk1.7.0_25\include\ \
+mvn -Dwin32.headers.jni=C:\jdk1.8.0_31\include\ \
     "-Dwin32.sdk=C:\Program Files\Microsoft SDKs\Windows\v7.1" \
     clean install
 +-------------------------------+
