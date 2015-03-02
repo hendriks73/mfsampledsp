@@ -4,7 +4,7 @@
         <maven>3.0.5</maven>
     </prerequisites>
     <groupId>com.tagtraum</groupId>
-    <version>0.9.5-SNAPSHOT</version>
+    <version>0.9.5</version>
     <artifactId>mfsampledsp</artifactId>
     <packaging>jar</packaging>
     <name>mfsampledsp</name>
@@ -304,7 +304,7 @@
         <connection>scm:git:git://github.com/hendriks73/mfsampledsp.git</connection>
         <developerConnection>scm:git:ssh://git@github.com/hendriks73/mfsampledsp.git</developerConnection>
         <url>https://github.com/hendriks73/mfsampledsp/tree/master</url>
-        <tag>HEAD</tag>
+        <tag>mfsampledsp-0.9.5</tag>
   </scm>
 
     <issueManagement>
