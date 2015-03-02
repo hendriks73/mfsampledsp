@@ -1,3 +1,11 @@
+0.9.5
+
+- Changed order of AudioFormat lookup. Now MF_METADATA_PROVIDER_SERVICE before MF_PROPERTY_HANDLER_SERVICE.
+- Removed custom Javadoc stylesheet.
+- Link against Java 8 API docs.
+- Updated Maven plugins.
+- Added GitHub ribbon.
+
 0.9.4
 
 - Fixed filename encoding issues with UNC paths.
