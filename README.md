@@ -49,7 +49,4 @@ So all in all, something like the following might work for you:
 Note that if you have a space character in your SDK path, you need to quote the *entire*
 `"-Dname=value"` parameter, not just the value part.
 
-Have fun,
-
--hendrik
-hs@tagtraum.com
+Enjoy!
