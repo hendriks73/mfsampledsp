@@ -67,7 +67,7 @@ Introduction
 <repository>
     <id>beatunes</id>
     <name>beaTunes Repository</name>
-    <url>httsp://www.beatunes.com/repo/maven2</url>
+    <url>https://www.beatunes.com/repo/maven2</url>
 </repository>
 +-------------------------------+
 
