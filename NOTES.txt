@@ -1,3 +1,7 @@
+0.9.6
+
+- Fixed library loading issues when the classpath contains a + char.
+
 0.9.5
 
 - Changed order of AudioFormat lookup. Now MF_METADATA_PROVIDER_SERVICE before MF_PROPERTY_HANDLER_SERVICE.

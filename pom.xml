@@ -291,12 +291,12 @@
             <uniqueVersion>false</uniqueVersion>
             <id>beatunes-repository</id>
             <name>beaTunes Repository</name>
-            <url>sftp://www.beatunes.com/var/www/html/repo/maven2</url>
+            <url>sftp://ssh.beatunes.com/var/www/html/repo/maven2</url>
         </repository>
         <downloadUrl>https://www.beatunes.com/repo/maven2</downloadUrl>
         <site>
             <id>tagtraum-site</id>
-            <url>ftp://www.tagtraum-industries.de/mfsampledsp/</url>
+            <url>sftp://ssh.strato.de/mfsampledsp/</url>
         </site>
     </distributionManagement>
 
