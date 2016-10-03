@@ -1,3 +1,7 @@
+0.9.7
+
+- Ensure that stream is still open when seeking.
+
 0.9.6
 
 - Fixed library loading issues when the classpath contains a + char.

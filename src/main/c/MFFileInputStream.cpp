@@ -301,6 +301,10 @@ JNIEXPORT void JNICALL Java_com_tagtraum_mfsampledsp_MFFileInputStream_seek(JNIE
         throwIOExceptionIfError(env, res, "Failed to init property.");
         goto bail;
     }
+    if (aio == NULL) {
+        throwIOExceptionIfError(env, 1, "Cannot seek on closed MFAudioIO");
+        goto bail;
+    }
     res = aio->mediaSrcReader->SetCurrentPosition(GUID_NULL, var);
     PropVariantClear(&var);
     if (res) {

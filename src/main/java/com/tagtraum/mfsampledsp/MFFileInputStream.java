@@ -56,6 +56,7 @@ public class MFFileInputStream extends MFNativePeerInputStream {
 
     @Override
     public void seek(long time, TimeUnit timeUnit) throws UnsupportedOperationException, IOException {
+        if (!isOpen()) throw new IOException("Stream is already closed: " + url);
         if (!isSeekable()) throw new UnsupportedOperationException("Seeking is not supported for " + url);
         final long hundredNanoSeconds = timeUnit.toNanos(time) / 100L;
         seek(pointer, hundredNanoSeconds);

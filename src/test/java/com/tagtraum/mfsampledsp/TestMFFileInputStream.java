@@ -319,6 +319,29 @@ public class TestMFFileInputStream {
         }
     }
 
+    @Test(expected = IOException.class)
+    public void testSeekAfterClose() throws IOException, UnsupportedAudioFileException {
+        final String filename = "test.mp3";
+        final File file = File.createTempFile("testSeekAfterClose", filename);
+        extractFile(filename, file);
+        MFFileInputStream in = null;
+        try {
+            in = new MFFileInputStream(file.toURI().toURL());
+            assertTrue(in.isSeekable());
+            in.read(new byte[1024 * 4]);
+            in.close();
+            in.seek(1, TimeUnit.SECONDS);
+        } finally {
+            if (in != null) {
+                try {
+                    in.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            file.delete();
+        }
+    }
 
     private void extractFile(final String filename, final File file) throws IOException {
         InputStream in = null;
