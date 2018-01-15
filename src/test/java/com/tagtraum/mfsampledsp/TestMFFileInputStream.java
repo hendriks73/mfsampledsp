@@ -173,7 +173,7 @@ public class TestMFFileInputStream {
         // pre-computed reference values index 1024-50 to 1024 (excl.)
         final int[] referenceValues = new int[]{240, 255, 230, 255, 230, 255, 232, 255, 232, 255, 247, 255, 247, 255, 246, 255, 246, 255, 235, 255, 235, 255, 250, 255, 250, 255, 13, 0, 13, 0, 15, 0, 15, 0, 39, 0, 39, 0, 87, 0, 87, 0, 90, 0, 90, 0, 31, 0, 31, 0};
 
-        int bytesRead = 0;
+        long bytesRead = 0;
         MFFileInputStream in = null;
         try {
             in = new MFFileInputStream(MFAudioFileReader.fileToURL(file));
@@ -197,7 +197,7 @@ public class TestMFFileInputStream {
                 }
             }
         }
-        Assert.assertEquals(133609, (bytesRead / 4));
+        Assert.assertEquals(133632L, (bytesRead / 4));
     }
 
     @Test

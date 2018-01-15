@@ -1,7 +1,7 @@
 0.9.8
 
 - Ensure that we can still read the whole file after seeking.
-
+- Fixed file length issue in TestMFFileInputStream.
 
 0.9.7
 
