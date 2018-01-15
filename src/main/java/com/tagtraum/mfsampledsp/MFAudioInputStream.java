@@ -69,6 +69,6 @@ public class MFAudioInputStream extends AudioInputStream {
     public void seek(final long time, final TimeUnit timeUnit) throws UnsupportedOperationException, IOException {
         nativePeerInputStream.seek(time, timeUnit);
         final long microSeconds = timeUnit.toMicros(time);
-        framePos = (long)((getFormat().getFrameRate() * microSeconds) / 1000L);
+        framePos = (long)((getFormat().getFrameRate() * microSeconds) / 1000000L);
     }
 }
