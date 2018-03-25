@@ -214,7 +214,7 @@ bail:
 JNIEXPORT jlong JNICALL Java_com_tagtraum_mfsampledsp_MFFileInputStream_open(JNIEnv *env, jobject stream, jstring url) {
 
     HRESULT res = S_OK;
-    MFAudioIO *aio = new MFAudioIO;
+    MFAudioIO *aio = new MFAudioIO();
     IMFMediaType *pPartialType = NULL;
 
     // Create a partial media type that specifies uncompressed PCM audio.
