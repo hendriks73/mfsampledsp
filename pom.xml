@@ -95,7 +95,7 @@
                     <doctitle>MFSampledSP ${project.version} API</doctitle>
                     <windowtitle>MFSampledSP ${project.version} API</windowtitle>
                     <links>
-                        <link>http://docs.oracle.com/javase/8/docs/api/</link>
+                        <link>http://docs.oracle.com/javase/10/docs/api/</link>
                     </links>
                 </configuration>
             </plugin>
@@ -103,6 +103,13 @@
     </reporting>
 
     <build>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
+
         <pluginManagement>
             <plugins>
                 <plugin>
@@ -123,7 +130,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-compiler-plugin</artifactId>
-                    <version>3.2</version>
+                    <version>3.7.0</version>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
@@ -162,6 +169,9 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-site-plugin</artifactId>
+                <configuration>
+                    <chmod>false</chmod>
+                </configuration>
             </plugin>
 
             <plugin>
@@ -170,6 +180,10 @@
                 <configuration>
                     <source>1.7</source>
                     <target>1.7</target>
+                    <compilerArgs>
+                        <arg>-h</arg>
+                        <arg>${project.build.directory}/native/include</arg>
+                    </compilerArgs>
                 </configuration>
             </plugin>
 
@@ -187,12 +201,22 @@
             </plugin>
 
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <configuration>
-                    <forkMode>once</forkMode>
-                    <argLine>-Djava.library.path=${project.build.directory}</argLine>
-                </configuration>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>build-helper-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>add-source</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>add-source</goal>
+                        </goals>
+                        <configuration>
+                            <sources>
+                                <source>${project.build.directory}/native</source>
+                            </sources>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
 
             <plugin>
@@ -206,18 +230,11 @@
                                 <property environment="env" />
 
                                 <echo>===================================</echo>
-                                <echo>Generating JNI headers via javah...</echo>
-                                <echo>===================================</echo>
-                                <mkdir dir="${project.build.directory}\native\javah" />
-                                <exec executable="${env.JAVA_HOME}\bin\javah.exe">
-                                    <arg line="-classpath '${project.build.directory}\classes' -force -d '${project.build.directory}\native\javah' com.tagtraum.mfsampledsp.MFAudioFileReader com.tagtraum.mfsampledsp.MFFileInputStream" />
-                                </exec>
-
-                                <echo>===================================</echo>
                                 <echo>Building i386 dll...</echo>
                                 <echo>===================================</echo>
                                 <ant antfile="${project.basedir}/cl_link.xml" inheritRefs="true">
                                     <property name="project.build.directory" value="${project.build.directory}" />
+                                    <property name="project.version" value="${project.version}" />
                                     <property name="basedir" value="${basedir}" />
                                     <property name="winsdk" value="${win32.sdk}" />
                                     <property name="arch" value="i386" />
@@ -230,6 +247,7 @@
                                 <echo>===================================</echo>
                                 <ant antfile="${project.basedir}/cl_link.xml" inheritRefs="true">
                                     <property name="project.build.directory" value="${project.build.directory}" />
+                                    <property name="project.version" value="${project.version}" />
                                     <property name="basedir" value="${basedir}" />
                                     <property name="winsdk" value="${win32.sdk}" />
                                     <property name="arch" value="x86_64" />
@@ -258,12 +276,12 @@
                         <configuration>
                             <artifacts>
                                 <artifact>
-                                    <file>${project.build.directory}/mfsampledsp-i386.dll</file>
+                                    <file>${project.build.directory}/classes/mfsampledsp-${project.version}-i386.dll</file>
                                     <type>dll</type>
                                     <classifier>i386</classifier>
                                 </artifact>
                                 <artifact>
-                                    <file>${project.build.directory}/mfsampledsp-x86_64.dll</file>
+                                    <file>${project.build.directory}/classes/mfsampledsp-${project.version}-x86_64.dll</file>
                                     <type>dll</type>
                                     <classifier>x86_64</classifier>
                                 </artifact>
@@ -306,7 +324,6 @@
         <connection>scm:git:git://github.com/hendriks73/mfsampledsp.git</connection>
         <developerConnection>scm:git:ssh://git@github.com/hendriks73/mfsampledsp.git</developerConnection>
         <url>https://github.com/hendriks73/mfsampledsp/tree/master</url>
-        <tag>mfsampledsp-0.9.10</tag>
   </scm>
 
     <issueManagement>
@@ -317,7 +334,7 @@
     <properties>
         <!-- This works with Windows SDK 7.1 -->
         <win32.sdk>C:\Program Files\Microsoft SDKs\Windows\v7.1</win32.sdk>
-        <win32.headers.jni>${env.JAVA_HOME}\include\</win32.headers.jni>
+        <win32.headers.jni>${java.home}\..\include\</win32.headers.jni>
         <!-- alias, because of http://maven.apache.org/plugins/maven-site-plugin/examples/creating-content.html#Filtering -->
         <projectversion>${project.version}</projectversion>
     </properties>

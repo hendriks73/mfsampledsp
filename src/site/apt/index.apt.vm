@@ -8,28 +8,23 @@
 Introduction
 
     <MFSampledSP> is a free, better-than-nothing, Windows-7-or-later implementation of some of the
-    {{{http://docs.oracle.com/javase/8/docs/api/javax/sound/sampled/spi/package-summary.html}javax.sound.sampled.spi}}
+    {{{http://docs.oracle.com/javase/10/docs/api/javax/sound/sampled/spi/package-summary.html}javax.sound.sampled.spi}}
     interfaces. It is part of the {{{http://www.tagtraum.com/sampledsp.html}SampledSP}} collection of
     <<<javax.sound.sampled>>> libraries.
     Its main purpose is to decode audio from various formats at
     high speed. Examples for supported formats are MP3 or AAC. That said, <MFSampledSP> supports
     all formats also supported by
-    {{{Microsoft's Media Foundation}https://msdn.microsoft.com/en-us/library/windows/desktop/dd757927(v=vs.85).aspx}}.
+    {{{https://msdn.microsoft.com/en-us/library/windows/desktop/dd757927(v=vs.85).aspx}Microsoft's Media Foundation}}.
 
-    Note that unlike other providers, <MFSampledSP> always converts audio data on-the-fly into LPCM.
+    Note that unlike other providers, <MFSampledSP> always converts audio data on-the-fly into linear signed PCM.
     No other conversions are supported. This also means that <<<AudioFormat>>> objects should be
     interpreted with a grain of salt.
-
-    Because <MFSampledSP> depends on native code, you need to add the provided DLLs to your <<<java.library.path>>>
-    and the provided jar to your classpath. Everything else is taken care of automatically.
 
 
 * Getting Started
 
     The easiest way to use <MFSampledSP> (other than simply using the
-    {{{http://www.beatunes.com/repo/maven2/com/tagtraum/mfsampledsp/${projectversion}/mfsampledsp-${projectversion}.jar}jar}} and
-    {{{http://www.beatunes.com/repo/maven2/com/tagtraum/mfsampledsp/${projectversion}/mfsampledsp-${projectversion}-x86_64.dll}64bit-dll}}/
-    {{{http://www.beatunes.com/repo/maven2/com/tagtraum/mfsampledsp/${projectversion}/mfsampledsp-${projectversion}-i386.dll}32bit-dll}})
+    {{{http://www.beatunes.com/repo/maven2/com/tagtraum/mfsampledsp/${projectversion}/mfsampledsp-${projectversion}.jar}jar}})
     is to start a
     {{{http://maven.apache.org/}Maven}} project and introduce a <MFSampledSP> dependency.
 
@@ -40,23 +35,6 @@ Introduction
     <groupId>com.tagtraum</groupId>
     <artifactId>mfsampledsp</artifactId>
     <version>${projectversion}</version>
-    <type>jar</type>
-</dependency>
-<dependency>
-    <groupId>com.tagtraum</groupId>
-    <artifactId>mfsampledsp</artifactId>
-    <version>${projectversion}</version>
-    <type>dll</type>
-    <!-- 32 bit dll -->
-    <classifier>i386</classifier>
-</dependency>
-<dependency>
-    <groupId>com.tagtraum</groupId>
-    <artifactId>mfsampledsp</artifactId>
-    <version>${projectversion}</version>
-    <type>dll</type>
-    <!-- 64 bit dll -->
-    <classifier>x86_64</classifier>
 </dependency>
 +-------------------------------+
 
@@ -74,18 +52,15 @@ Introduction
     As long as the native library is in the same directory as the <MFSampledSP> jar, it will be picked up.
 
     To use the library, simply use the
-    {{{http://docs.oracle.com/javase/7/docs/api/javax/sound/sampled/package-summary.html}javax.sound.sampled}}
+    {{{http://docs.oracle.com/javase/10/docs/api/javax/sound/sampled/package-summary.html}javax.sound.sampled}}
     classes like you normally would.
 
 * Requirements
 
-    <MFSampledSP> requires Windows 7 or later.
+    <MFSampledSP> requires Windows 7 or later and Java 7 or later.
 
-    For a service provider implementation for OS X, based on Apple's CoreAudio, check out
+    For a service provider implementation for macOS, based on Apple's CoreAudio, check out
     {{{http://www.tagtraum.com/casampledsp/}CASampledSP}}.
 
-    For a cross platform service provider implementation featuring free formats like FLAC and OGG, take a look at
+    For a cross platform service provider implementation featuring free formats like FLAC, OGG, and MP3 take a look at
     {{{http://www.tagtraum.com/ffsampledsp/}FFSampledSP}}.
-
-    For a cross platform (OS X/Windows) 32 bit service provider based on QuickTime, check out
-    {{{http://www.tagtraum.com/qtsampledsp/}QTSampledSP}}.

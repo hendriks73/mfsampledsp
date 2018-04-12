@@ -2,6 +2,8 @@
 
 - Updated banner.
 - Moved to Java7.
+- Use ${java.home} from Maven to locate JNI headers.
+- Embedded dlls into mfsampledsp jar.
 
 
 0.9.10

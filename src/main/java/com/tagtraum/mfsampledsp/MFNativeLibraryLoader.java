@@ -20,13 +20,11 @@
  */
 package com.tagtraum.mfsampledsp;
 
-import java.io.File;
-import java.io.FileFilter;
-import java.io.FileNotFoundException;
-import java.io.UnsupportedEncodingException;
+import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashSet;
+import java.util.Properties;
 import java.util.Set;
 import java.util.logging.Logger;
 
@@ -47,6 +45,7 @@ public final class MFNativeLibraryLoader {
     private static final String ARCHITECTURE_CLASSIFIER = OS_ARCH_I386 ? "-i386" : "-x86_64";
     private static final String NATIVE_LIBRARY_EXTENSION = ".dll";
     private static final Set<String> LOADED = new HashSet<>();
+    private static final String VERSION = readProjectVersion();
 
     private static Boolean mfSampledSPLibraryLoaded;
 
@@ -93,6 +92,22 @@ public final class MFNativeLibraryLoader {
     public static synchronized void loadLibrary(final String libName, final Class baseClass) {
         final String key = libName + "|" + baseClass.getName();
         if (LOADED.contains(key)) return;
+
+        // check in our own jar first
+        final String packagedNativeLib = libName + "-" + VERSION + ARCHITECTURE_CLASSIFIER + NATIVE_LIBRARY_EXTENSION;
+        final File extractedNativeLib = new File(System.getProperty("java.io.tmpdir") + "/" + packagedNativeLib);
+        if (!extractedNativeLib.exists()) {
+            extractResourceToFile(baseClass, "/" + packagedNativeLib, extractedNativeLib);
+        }
+        if (extractedNativeLib.exists()) {
+            try {
+                Runtime.getRuntime().load(extractedNativeLib.toString());
+                LOADED.add(key);
+            } catch (Error e) {
+                // failed to extract and load, will try other ways
+            }
+        }
+
         try {
             System.loadLibrary(libName + ARCHITECTURE_CLASSIFIER);
             LOADED.add(key);
@@ -104,6 +119,30 @@ public final class MFNativeLibraryLoader {
             } catch (FileNotFoundException e1) {
                 throw e;
             }
+        }
+    }
+
+    /**
+     * Extracts the given resource and writes it to the specified file.
+     * Note that this method fails silently.
+     *
+     * @param baseClass class to use as base class for the resource lookup
+     * @param sourceResource resource name
+     * @param targetFile target file
+     */
+    private static void extractResourceToFile(final Class baseClass, final String sourceResource, final File targetFile) {
+        try (final InputStream in = baseClass.getResourceAsStream(sourceResource)) {
+            if (in != null) {
+                try (final OutputStream out = new FileOutputStream(targetFile)) {
+                    final byte[] buf = new byte[1024 * 8];
+                    int justRead;
+                    while ((justRead = in.read(buf)) != -1) {
+                        out.write(buf, 0, justRead);
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -233,4 +272,20 @@ public final class MFNativeLibraryLoader {
         }
         return needToChange ? sb.toString() : s;
     }
+
+    /**
+     * Read project version, injected by Maven.
+     *
+     * @return project version or <code>unknown</code>, if not found.
+     */
+    private static String readProjectVersion() {
+        try {
+            final Properties properties = new Properties();
+            properties.load(MFNativeLibraryLoader.class.getResourceAsStream("project.properties"));
+            return properties.getProperty("version", "unknown");
+        } catch (Exception e) {
+            return "unknown";
+        }
+    }
+
 }
