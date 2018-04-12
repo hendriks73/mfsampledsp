@@ -1,3 +1,8 @@
+0.9.11
+
+- Updated banner.
+
+
 0.9.10
 
 - Ensure that MFAudioIO is properly initialized.
