@@ -95,7 +95,7 @@ public final class MFNativeLibraryLoader {
 
         // check in our own jar first
         final String packagedNativeLib = libName + "-" + VERSION + ARCHITECTURE_CLASSIFIER + NATIVE_LIBRARY_EXTENSION;
-        final File extractedNativeLib = new File(System.getProperty("java.io.tmpdir") + "/" + packagedNativeLib);
+        final File extractedNativeLib = new File(System.getProperty("java.io.tmpdir") + File.separator + packagedNativeLib);
         if (!extractedNativeLib.exists()) {
             extractResourceToFile(baseClass, "/" + packagedNativeLib, extractedNativeLib);
         }
