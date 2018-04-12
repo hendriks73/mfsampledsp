@@ -26,10 +26,8 @@ import java.io.FileNotFoundException;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.net.URLDecoder;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
 /**
@@ -48,7 +46,7 @@ public final class MFNativeLibraryLoader {
     private static final String CLASS_FILE_EXTENSION = ".class";
     private static final String ARCHITECTURE_CLASSIFIER = OS_ARCH_I386 ? "-i386" : "-x86_64";
     private static final String NATIVE_LIBRARY_EXTENSION = ".dll";
-    private static final Set<String> LOADED = new HashSet<String>();
+    private static final Set<String> LOADED = new HashSet<>();
 
     private static Boolean mfSampledSPLibraryLoaded;
 
@@ -144,11 +142,7 @@ public final class MFNativeLibraryLoader {
                 filename = libs[0].toString();
             }
             return filename;
-        } catch (UnsupportedEncodingException e) {
-            final FileNotFoundException fnfe = new FileNotFoundException(name + ": " + e.toString());
-            fnfe.initCause(e);
-            throw fnfe;
-        } catch (MalformedURLException e) {
+        } catch (UnsupportedEncodingException | MalformedURLException e) {
             final FileNotFoundException fnfe = new FileNotFoundException(name + ": " + e.toString());
             fnfe.initCause(e);
             throw fnfe;

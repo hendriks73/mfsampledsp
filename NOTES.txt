@@ -1,6 +1,7 @@
 0.9.11
 
 - Updated banner.
+- Moved to Java7.
 
 
 0.9.10

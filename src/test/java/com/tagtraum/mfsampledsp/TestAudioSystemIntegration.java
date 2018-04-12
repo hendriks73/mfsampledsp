@@ -6,7 +6,6 @@
  */
 package com.tagtraum.mfsampledsp;
 
-import org.junit.Assert;
 import org.junit.Test;
 
 import javax.sound.sampled.*;
@@ -30,9 +29,7 @@ public class TestAudioSystemIntegration {
         extractFile(filename, file);
 
         int bytesRead = 0;
-        AudioInputStream in = null;
-        try {
-            in = AudioSystem.getAudioInputStream(file);
+        try (final AudioInputStream in = AudioSystem.getAudioInputStream(file)) {
             int justRead;
             final byte[] buf = new byte[1024];
             while ((justRead = in.read(buf)) != -1) {
@@ -40,13 +37,7 @@ public class TestAudioSystemIntegration {
                 bytesRead += justRead;
             }
         } finally {
-            if (in != null) {
-                try {
-                    in.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
+            file.delete();
         }
         System.out.println("Bytes read: " + bytesRead);
     }
@@ -58,10 +49,8 @@ public class TestAudioSystemIntegration {
         extractFile(filename, file);
 
         int bytesRead = 0;
-        AudioInputStream in = null;
-        try {
-            final AudioInputStream mp3Stream = AudioSystem.getAudioInputStream(file);
-            in = AudioSystem.getAudioInputStream(AudioFormat.Encoding.PCM_SIGNED, mp3Stream);
+        try (final AudioInputStream mp3Stream = AudioSystem.getAudioInputStream(file)) {
+            final AudioInputStream in = AudioSystem.getAudioInputStream(AudioFormat.Encoding.PCM_SIGNED, mp3Stream);
             int justRead;
             final byte[] buf = new byte[1024];
             while ((justRead = in.read(buf)) != -1) {
@@ -69,29 +58,20 @@ public class TestAudioSystemIntegration {
                 bytesRead += justRead;
             }
         } finally {
-            if (in != null) {
-                try {
-                    in.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
+            file.delete();
         }
         System.out.println("Bytes read: " + bytesRead);
     }
 
     @Test
-    public void testWMA() throws UnsupportedAudioFileException, IOException, InterruptedException, InvocationTargetException {
+    public void testWMA() throws InterruptedException, InvocationTargetException {
         new MFAudioFileReader();
-
         SwingUtilities.invokeAndWait(new Runnable() {
             public void run() {
                 try {
                     AudioFileFormat audioFileFormat = AudioSystem.getAudioFileFormat(new File("C:\\Users\\Public\\Music\\Sample Music\\BachCPE_SonataAmin_1.wma"));
                     System.out.println(audioFileFormat);
-                } catch (UnsupportedAudioFileException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
+                } catch (UnsupportedAudioFileException | IOException e) {
                     e.printStackTrace();
                 }
             }
@@ -99,30 +79,12 @@ public class TestAudioSystemIntegration {
     }
 
     private void extractFile(final String filename, final File file) throws IOException {
-        InputStream in = null;
-        OutputStream out = null;
-        try {
-            in = getClass().getResourceAsStream(filename);
-            out = new FileOutputStream(file);
+        try (final InputStream in = getClass().getResourceAsStream(filename);
+             final OutputStream out = new FileOutputStream(file)) {
             final byte[] buf = new byte[1024*64];
             int justRead;
             while ((justRead = in.read(buf)) != -1) {
                 out.write(buf, 0, justRead);
-            }
-        } finally {
-            if (in != null) {
-                try {
-                    in.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-            if (out != null) {
-                try {
-                    out.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
             }
         }
     }

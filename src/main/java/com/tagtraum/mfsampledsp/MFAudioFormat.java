@@ -40,7 +40,7 @@ public class MFAudioFormat extends AudioFormat {
     }
 
     private static Map<String, Object> createProperties(final int bitRate, final boolean vbr) {
-        final Map<String, Object> properties = new HashMap<String, Object>();
+        final Map<String, Object> properties = new HashMap<>();
         if (bitRate > 0) properties.put("bitrate", bitRate);
         properties.put("vbr", vbr);
         return properties;
@@ -84,8 +84,8 @@ public class MFAudioFormat extends AudioFormat {
 
         public static MFEncoding PCM_SIGNED = new MFEncoding(Encoding.PCM_SIGNED.toString(), MFAudioFormat_PCM);
 
-        private static Map<Integer, MFEncoding> DATAFORMAT_MAP = new HashMap<Integer, MFEncoding>();
-        private static Map<String, MFEncoding> NAME_MAP = new HashMap<String, MFEncoding>();
+        private static Map<Integer, MFEncoding> DATAFORMAT_MAP = new HashMap<>();
+        private static Map<String, MFEncoding> NAME_MAP = new HashMap<>();
 
         static {
             DATAFORMAT_MAP.put(MP1.getDataFormat(), MP1);
@@ -120,7 +120,7 @@ public class MFAudioFormat extends AudioFormat {
         }
 
         public static Set<MFEncoding> getSupportedEncodings() {
-            return new HashSet<MFEncoding>(DATAFORMAT_MAP.values());
+            return new HashSet<>(DATAFORMAT_MAP.values());
         }
 
         public static synchronized MFEncoding getInstance(final String name) {

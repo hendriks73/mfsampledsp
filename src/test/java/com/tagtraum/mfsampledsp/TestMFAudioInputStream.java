@@ -67,31 +67,14 @@ public class TestMFAudioInputStream {
     }
 
     private void extractFile(final String filename, final File file) throws IOException {
-        InputStream in = null;
-        OutputStream out = null;
-        try {
-            in = getClass().getResourceAsStream(filename);
-            out = new FileOutputStream(file);
+        try (final InputStream in = getClass().getResourceAsStream(filename);
+             final OutputStream out = new FileOutputStream(file)) {
             final byte[] buf = new byte[1024*64];
             int justRead;
             while ((justRead = in.read(buf)) != -1) {
                 out.write(buf, 0, justRead);
             }
-        } finally {
-            if (in != null) {
-                try {
-                    in.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-            if (out != null) {
-                try {
-                    out.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
         }
     }
+
 }

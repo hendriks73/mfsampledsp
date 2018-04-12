@@ -21,7 +21,6 @@
 package com.tagtraum.mfsampledsp;
 
 import javax.sound.sampled.AudioFileFormat;
-import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.UnsupportedAudioFileException;
 import java.io.File;
@@ -127,7 +126,7 @@ public class MFAudioFileFormat extends AudioFileFormat {
     public Map<String, Object> properties() {
         Map<java.lang.String,java.lang.Object> obj;
         if (properties == null) {
-            obj = new HashMap<java.lang.String,java.lang.Object>(0);
+            obj = new HashMap<>(0);
         } else {
             obj = (Map<java.lang.String,java.lang.Object>)properties.clone();
         }
