@@ -26,7 +26,7 @@
             <arg line="/E:ON /V:ON /C &quot;&quot;&quot;${winsdk}\bin\setenv.cmd&quot;&quot;&quot; /${machine} /Release /win7 &amp;&amp; mt.exe /nologo /verbose /outputresource:classes\mfsampledsp-${project.version}-${arch}.dll;#2 /manifest objs-${arch}\mfsampledsp.dll.intermediate.manifest"/>
         </exec>
         <!-- delete lib and exp files that aren't needed anymore -->
-        <delete file="classes\mfsampledsp-${project.version}-${arch}.lib"/>
-        <delete file="classes\mfsampledsp-${project.version}-${arch}.exp"/>
+        <delete file="${project.build.directory}\classes\mfsampledsp-${project.version}-${arch}.lib"/>
+        <delete file="${project.build.directory}\classes\mfsampledsp-${project.version}-${arch}.exp"/>
     </target>
 </project>
